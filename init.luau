@@ -39,7 +39,6 @@ type Achievement = {
     Desc: string,
     Reason: string,
     Image: string,
-    GetInfo: (self: Achievement) -> Achievement,
     [string]: any
 }
 
@@ -86,31 +85,13 @@ end
 Module.Grant = function(self, achievementConfig: AchievementConfig, options: Options?)
     options = typeof(options) == "table" and options or DefaultOptions
     
-    local config = DecodeConfig()
-
-    -- Fetch achievement config properties
-    local achievement = {}
-    if typeof(achievementConfig) == "table" then
-        for i, v in next, achievementConfig do
-            achievement[i] = v
-        end
-    end
-    for i, v in next, DefaultAchievement do
-        if achievement[i] == nil then
-            achievement[i] = v
-        end
-    end
-    
     -- Check if player already owns custom achievement
+    local config = DecodeConfig()
     if
         options.CheckOwned
         and table.find(config, achievementConfig.Identifier)
     then
         return
-    end
-
-    achievement.GetInfo = function(self: Achievement): Achievement
-        return self
     end
     
     -- Display fake achievement
