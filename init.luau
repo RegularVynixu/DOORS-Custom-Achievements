@@ -11,7 +11,6 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 local Modules = {
     AchievementUnlock = require(PlayerGui:FindFirstChild("AchievementUnlock", true) :: ModuleScript),
-    Achievements = require(ReplicatedStorage.ModulesShared.Achievements :: ModuleScript)
 }
 local DefaultAchievement = {
     Identifier = "TestAchievement",
@@ -115,12 +114,7 @@ Module.Grant = function(self, achievementConfig: AchievementConfig, options: Opt
     end
     
     -- Display fake achievement
-    task.defer(function()
-        local name = "CustomAchievement_"..tick()
-        Modules.Achievements[name] = achievement
-        Modules:AchievementUnlock(name)
-        Modules.Achievements[name] = nil
-    end)
+    task.defer(Modules.AchievementUnlock, Modules, achievementConfig)
 
     -- Check if custom achievement should be remembered
     if
